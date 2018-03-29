@@ -1,0 +1,117 @@
+--- !com.amazonaws.mobilehub.v0.Project
+uploads:
+  - !com.amazonaws.mobilehub.v0.Upload
+    fileName: lambda-archive.zip
+    targetS3Bucket: deployments
+features:
+  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic
+    components:
+      ProjectsAPI: !com.amazonaws.mobilehub.v0.API
+        attributes:
+          name: ProjectsAPI
+          requires-signin: false
+          sdk-generation-stage-name: Development
+        paths:
+          /projects: !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /projects/{proxy+}"
+            codeFilename: uploads/lambda-archive.zip
+            handler: index.handler
+            memorySize: "128"
+            name: handler
+            timeout: "15"
+            enableCORS: true
+            runtime: nodejs6.10
+            environment:
+              TASKS_TABLE: ___DYNAMIC_PREFIX___-tasks
+              PROJECTS_TABLE: ___DYNAMIC_PREFIX___-projects
+          "/projects/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /projects/{proxy+}"
+            codeFilename: uploads/lambda-archive.zip
+            handler: index.handler
+            memorySize: "128"
+            name: handler
+            timeout: "15"
+            enableCORS: true
+            runtime: nodejs6.10
+            environment:
+              TASKS_TABLE: ___DYNAMIC_PREFIX___-tasks
+              PROJECTS_TABLE: ___DYNAMIC_PREFIX___-projects
+      TasksAPI: !com.amazonaws.mobilehub.v0.API
+        attributes:
+          name: TasksAPI
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /tasks: !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /tasks/{proxy+}"
+            codeFilename: uploads/lambda-archive.zip
+            handler: index.handler
+            memorySize: "128"
+            name: handler
+            timeout: "15"
+            enableCORS: true
+            runtime: nodejs6.10
+            environment:
+              TASKS_TABLE: ___DYNAMIC_PREFIX___-tasks
+              PROJECTS_TABLE: ___DYNAMIC_PREFIX___-projects
+          "/tasks/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /tasks/{proxy+}"
+            codeFilename: uploads/lambda-archive.zip
+            handler: index.handler
+            memorySize: "128"
+            name: handler
+            timeout: "15"
+            enableCORS: true
+            runtime: nodejs6.10
+            environment:
+              TASKS_TABLE: ___DYNAMIC_PREFIX___-tasks
+              PROJECTS_TABLE: ___DYNAMIC_PREFIX___-projects
+  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery
+    attributes:
+      enabled: true
+      visibility: public-global
+    components:
+      release: !com.amazonaws.mobilehub.v0.Bucket {}
+  database: !com.amazonaws.mobilehub.v0.Database
+    components:
+      database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase
+        tables:
+          - !com.amazonaws.mobilehub.v0.NoSQLTable
+            attributes:
+              taskId: S
+              userId: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: taskId
+            rangeKeyType: S
+            tableName: ___DYNAMIC_PREFIX___-tasks
+            tablePrivacy: private
+          - !com.amazonaws.mobilehub.v0.NoSQLTable
+            attributes:
+              month: S
+              projectId: S
+            hashKeyName: projectId
+            hashKeyType: S
+            rangeKeyName: month
+            rangeKeyType: S
+            tableName: ___DYNAMIC_PREFIX___-projects
+            tablePrivacy: public
+  sign-in: !com.amazonaws.mobilehub.v0.SignIn
+    attributes:
+      enabled: true
+      optional-sign-in: true
+    components:
+      sign-in-user-pools: !com.amazonaws.mobilehub.v0.UserPoolsIdentityProvider
+        attributes:
+          alias-attributes:
+            - email
+          mfa-configuration: OFF
+          name: userpool
+          password-policy: !com.amazonaws.mobilehub.ConvertibleMap
+            min-length: "8"
+            require-lower-case: true
+            require-numbers: true
+            require-symbols: true
+            require-upper-case: true
+name: cmc-katabat-ctc-app
+region: us-east-1
