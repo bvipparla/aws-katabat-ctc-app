@@ -14,11 +14,13 @@ import { TabsPage } from '../pages/tabs/tabs'
 import { LoginModal } from '../modal/login/login'
 import { LogoutModal } from '../modal/logout/logout'
 import { AddTaskModal } from '../modal/addtask/addtask'
+import { AddParticipantModal } from '../modal/addparticipant/addparticipant'
 
 import { AwsConfig } from './app.config'
 import { AuthService, AuthServiceProvider } from './auth.service'
 import { ProjectStore, ProjectStoreProvider } from './project.store'
 import { TaskStore, TaskStoreProvider } from './task.store'
+import { ParticipantStore, ParticipantStoreProvider } from './models/participant.store'
 import { Sigv4Http, Sigv4HttpProvider } from './sigv4.service'
 
 import { ChartsModule } from 'ng2-charts'
@@ -33,6 +35,7 @@ import { momentFromNowPipe } from './momentFromNow.pipe'
     LoginModal,
     LogoutModal,
     AddTaskModal,
+    AddParticipantModal,
     momentFromNowPipe
   ],
   imports: [
@@ -50,7 +53,8 @@ import { momentFromNowPipe } from './momentFromNow.pipe'
     TabsPage,
     LoginModal,
     LogoutModal,
-    AddTaskModal
+    AddTaskModal,
+    AddParticipantModal
   ],
   providers: [
     StatusBar,
@@ -59,6 +63,7 @@ import { momentFromNowPipe } from './momentFromNow.pipe'
     AuthService, AuthServiceProvider,
     ProjectStore, ProjectStoreProvider,
     TaskStore, TaskStoreProvider,
+    ParticipantStore, ParticipantStoreProvider,
     Sigv4Http, Sigv4HttpProvider
   ]
 })

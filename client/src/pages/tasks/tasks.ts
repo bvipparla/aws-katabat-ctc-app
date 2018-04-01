@@ -5,10 +5,9 @@ import { ModalController } from 'ionic-angular'
 import { ToastController } from 'ionic-angular'
 
 import { AuthService } from '../../app/auth.service'
-import { AddTaskModal } from '../../modal/addtask/addtask'
-import { ProjectStore } from '../../app/project.store'
-import { TaskStore } from '../../app/task.store'
-import { ITask } from '../../app/task.interface'
+import { AddParticipantModal } from '../../modal/addparticipant/addparticipant'
+import { ParticipantStore } from '../../app/models/participant.store'
+import { IParticipant } from '../../app/models/participant.interface'
 
 @Component({
   selector: 'page-tasks',
@@ -21,14 +20,13 @@ export class TasksPage {
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private auth: AuthService,
-    private projectStore: ProjectStore,
-    private taskStore: TaskStore
+    private participantStore: ParticipantStore
   ) {}
 
   ionViewDidLoad() {}
 
   doRefresh (refresher) {
-    let subscription = this.taskStore.refresh().subscribe({
+    let subscription = this.participantStore.refresh().subscribe({
       complete: () => {
         subscription.unsubscribe()
         refresher.complete()
@@ -36,31 +34,12 @@ export class TasksPage {
     })
   }
 
-  deleteTask (index) {
-    this.taskStore.deleteTask(index).subscribe(task => {
-      if (!task) { return console.log('could not delete task. Please check logs') }
-
-      this.presentToast(`"${task.name}" was deleted.`)
-      let monthCompleted =  (task.completed && task.completedOn) ? task.completedOn.substr(0,7) : undefined
-      this.projectStore.deleteTask(task.project, task.createdOn.substr(0,7), monthCompleted)
-    })
-  }
-
-  completeTask(index) {
-    this.taskStore.completeTask(index).subscribe(task => {
-      if (!task) { return console.log('could not complete task. Please see logs') }
-
-      this.presentToast(`"${task.name}" was completed.`)
-      this.projectStore.completeTask(task.project, task.completedOn.substr(0,7))
-    })
-  }
-
   openModal () {
-    let modal = this.modalCtrl.create(AddTaskModal)
-    modal.onDidDismiss((task : ITask) => {
-      if (task && task.taskId) {
-        this.presentToast(`"${task.name}" was created.`)
-        this.projectStore.addTask(task.project, task.createdOn.substr(0,7))
+    let modal = this.modalCtrl.create(AddParticipantModal, null, { cssClass : 'participantModal'
+    })
+    modal.onDidDismiss((participant : IParticipant) => {
+      if (participant && participant.Id) {
+        this.presentToast(`"${participant.Id}" was created.`)
       }
     })
     modal.present()
@@ -76,5 +55,5 @@ export class TasksPage {
     toast.present()
   }
 
-  get size() { return this.taskStore.tasks.map((tasks) => tasks.size) }
+  get size() { return this.participantStore.participants.map((participants) => participants.size) }
 }

@@ -47,7 +47,9 @@ export class HomePage {
     public auth: AuthService,
     public store: ProjectStore) { }
 
-  ionViewDidLoad() {this.store.projects.subscribe((projects) => this.createCharts(projects)) }
+  ionViewDidLoad() {
+    this.store.projects.subscribe((projects) => this.createCharts(projects))
+  }
 
   doRefresh (refresher) {
     let subscription = this.store.refresh().subscribe({
@@ -119,6 +121,6 @@ export class HomePage {
   }
 
   get userColor ():string {
-    return this.auth.isUserSignedIn() ? 'secondary' : 'primary'
+    return this.auth.isUserSignedIn() ? 'secondary' : 'danger'
   }
 }

@@ -28,14 +28,14 @@ export class ProjectStore {
   private endpoint:string
 
   constructor (private sigv4: Sigv4Http, private auth: AuthService, private config: Config) {
-    this.endpoint = this.config.get('APIs')['ProjectsAPI']
+    this.endpoint = this.config.get('APIs')['ParticipantsAPI']
     this.refresh()
   }
 
   get projects () { return Observable.create( fn => this._projects.subscribe(fn) ) }
 
   refresh () : Observable<any> {
-    let observable =  this.auth.getCredentials().map(creds => this.sigv4.get(this.endpoint, 'projects', creds)).concatAll().share()
+    let observable =  this.auth.getCredentials().map(creds => this.sigv4.get(this.endpoint, 'participants', creds)).concatAll().share()
     observable.subscribe(resp => {
       let data = resp.json()
       this._projectsMap = _keyBy(data.projects, (p) => `${p.projectId}+${p.month}`)

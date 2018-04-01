@@ -29,7 +29,7 @@ export class TaskStore {
   private endpoint:string
 
   constructor (private sigv4: Sigv4Http, private auth: AuthService, private config: Config) {
-    this.endpoint = this.config.get('APIs')['TasksAPI']
+    this.endpoint = this.config.get('APIs')['ParticipantsAPI']
     this.auth.signoutNotification.subscribe(() => this._tasks.next(List([])))
     this.auth.signinNotification.subscribe(() => this.refresh() )
     this.refresh()
