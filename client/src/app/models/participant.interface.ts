@@ -11,7 +11,7 @@ interface IAddress {
   line2:string
   city:string
   state:string
-  zipCode:string
+  zipcode:string
   country:string
 }
 
@@ -28,7 +28,7 @@ interface IVolunteerInfo {
   from:string
   to:string
   comments:string
-  priorExp:string
+  priorExp:boolean
   cancerSurvivor:boolean
   tShirt:string
 }
@@ -45,25 +45,27 @@ interface IDonation {
 }
 
 interface IGeneralInfo {
-  InName:string
-  fName:string
-  lName:string
-  cName:string
-  email:string
-  address:IAddress
-  phone?:Array<IPhone>
-  registration:IRegistrationInfo
+
 }
 
 export interface IParticipant {
   Id:string
   yyyy:number
-  type:ParticipantType
-  info:IGeneralInfo
+  type: Array<ParticipantType>
+  InName:string
+  fName:string
+  lName:string
+  cName:string
+  fullName?: string
+  email:string
+  phone:string
+  address:IAddress
+  registration:IRegistrationInfo
   donor:IDonorInfo
   rider:IRiderInfo
   vol:IVolunteerInfo
   donation:IDonation
   createdOn?:string
   createdBy:any
+  updated:number
 }

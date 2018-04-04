@@ -6,14 +6,14 @@ uploads:
 features:
   cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic
     components:
-      InitiativesAPI: !com.amazonaws.mobilehub.v0.API
+      DashboardAPI: !com.amazonaws.mobilehub.v0.API
         attributes:
-          name: InitiativesAPI
+          name: DashboardAPI
           requires-signin: false
           sdk-generation-stage-name: Development
         paths:
-          /initiatives: !com.amazonaws.mobilehub.v0.Function
-            description: "Handler for calls to resource path : /initiatives/{proxy+}"
+          /dashboard: !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /dashboard/{proxy+}"
             codeFilename: uploads/lambda-archive.zip
             handler: index.handler
             memorySize: "128"
@@ -23,9 +23,9 @@ features:
             runtime: nodejs6.10
             environment:
               PARTICIPANTS_TABLE: ___DYNAMIC_PREFIX___-participants
-              INITIATIVES_TABLE: ___DYNAMIC_PREFIX___-initiatives
-          "/initiatives/{proxy+}": !com.amazonaws.mobilehub.v0.Function
-            description: "Handler for calls to resource path : /initiatives/{proxy+}"
+              DASHBOARD_TABLE: ___DYNAMIC_PREFIX___-dashboard
+          "/dashboard/{proxy+}": !com.amazonaws.mobilehub.v0.Function
+            description: "Handler for calls to resource path : /dashboard/{proxy+}"
             codeFilename: uploads/lambda-archive.zip
             handler: index.handler
             memorySize: "128"
@@ -35,7 +35,7 @@ features:
             runtime: nodejs6.10
             environment:
               PARTICIPANTS_TABLE: ___DYNAMIC_PREFIX___-participants
-              INITIATIVES_TABLE: ___DYNAMIC_PREFIX___-initiatives
+              DASHBOARD_TABLE: ___DYNAMIC_PREFIX___-dashboard
       ParticipantsAPI: !com.amazonaws.mobilehub.v0.API
         attributes:
           name: ParticipantsAPI
@@ -53,7 +53,7 @@ features:
             runtime: nodejs6.10
             environment:
               PARTICIPANTS_TABLE: ___DYNAMIC_PREFIX___-participants
-              INITIATIVES_TABLE: ___DYNAMIC_PREFIX___-initiatives
+              DASHBOARD_TABLE: ___DYNAMIC_PREFIX___-dashboard
           "/participants/{proxy+}": !com.amazonaws.mobilehub.v0.Function
             description: "Handler for calls to resource path : /participants/{proxy+}"
             codeFilename: uploads/lambda-archive.zip
@@ -65,7 +65,7 @@ features:
             runtime: nodejs6.10
             environment:
               PARTICIPANTS_TABLE: ___DYNAMIC_PREFIX___-participants
-              INITIATIVES_TABLE: ___DYNAMIC_PREFIX___-initiatives
+              DASHBOARD_TABLE: ___DYNAMIC_PREFIX___-dashboard
   content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery
     attributes:
       enabled: true
@@ -78,23 +78,21 @@ features:
         tables:
           - !com.amazonaws.mobilehub.v0.NoSQLTable
             attributes:
-              yyyy: N
               Id: S
-            hashKeyName: yyyy
-            hashKeyType: N
-            rangeKeyName: Id
-            rangeKeyType: S
+              timestamp: N
+            hashKeyName: Id
+            hashKeyType: S
             tableName: ___DYNAMIC_PREFIX___-participants
             tablePrivacy: public
           - !com.amazonaws.mobilehub.v0.NoSQLTable
             attributes:
               yyyy: N
-              Id: S
+              eType: S
             hashKeyName: yyyy
             hashKeyType: N
-            rangeKeyName: Id
+            rangeKeyName: eType
             rangeKeyType: S
-            tableName: ___DYNAMIC_PREFIX___-initiatives
+            tableName: ___DYNAMIC_PREFIX___-dashboard
             tablePrivacy: public
   sign-in: !com.amazonaws.mobilehub.v0.SignIn
     attributes:
@@ -106,12 +104,12 @@ features:
           alias-attributes:
             - email
           mfa-configuration: OFF
-          name: userpool
+          name: ctc-userpool
           password-policy: !com.amazonaws.mobilehub.ConvertibleMap
             min-length: "8"
             require-lower-case: true
             require-numbers: true
             require-symbols: true
             require-upper-case: true
-name: cmc-katabat-ctc-app
+name: katabat-ctc-app
 region: us-east-1

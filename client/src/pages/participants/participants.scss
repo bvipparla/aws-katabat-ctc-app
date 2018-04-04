@@ -1,0 +1,64 @@
+page-participants {
+  // font-size: 50%;
+
+  .card-title {
+    // font-weight: bold;
+    // background-color: color($colors, light);
+    // border-bottom: 1px solid #ccc;
+    // margin-bottom: 10px;
+    // border-top: 10px solid color($colors, primary);
+  }
+  .card-stats {
+    background-color: color($colors, light);
+    border: 1px solid #ccc;
+  }
+
+  ion-note {
+    // font-size: 12px;
+    // align-self: flex-start;
+    // margin-top: 14px;
+  }
+
+  .danger-text {
+    color: color($colors, danger)
+  }
+
+  .ok-text {
+    color: color($colors, primary)
+  }
+
+  .scroll-zoom-wrapper {
+    white-space: nowrap;
+  }
+
+  ion-card {
+    width: 300px !important;
+    display: inline-block;
+  }
+
+  ion-scroll {
+    min-height: 170px;
+    height: auto;
+
+    .scroll-content {
+      padding: 0px !important;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background-color: #F5F5F5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #000000;
+    }
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      background-color: #F5F5F5;
+    }
+  }
+  .spinner-container {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+  }
+}

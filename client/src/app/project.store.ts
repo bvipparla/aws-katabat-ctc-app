@@ -34,8 +34,9 @@ export class ProjectStore {
 
   get projects () { return Observable.create( fn => this._projects.subscribe(fn) ) }
 
+
   refresh () : Observable<any> {
-    let observable =  this.auth.getCredentials().map(creds => this.sigv4.get(this.endpoint, 'participants', creds)).concatAll().share()
+    let observable =  this.auth.getCredentials().map(creds => this.sigv4.get(this.endpoint, 'participants/2018', creds)).concatAll().share()
     observable.subscribe(resp => {
       let data = resp.json()
       this._projectsMap = _keyBy(data.projects, (p) => `${p.projectId}+${p.month}`)

@@ -32,14 +32,17 @@ export class ParticipantStore {
     this.endpoint = this.config.get('APIs')['ParticipantsAPI']
     this.auth.signoutNotification.subscribe(() => this._participants.next(List([])))
     this.auth.signinNotification.subscribe(() => this.refresh() )
-    this.refresh()
   }
 
   get participants () { return Observable.create( fn => this._participants.subscribe(fn) ) }
 
-  refresh () : Observable<any> {
+  refresh (searchTerm?:string) : Observable<any> {
     if (this.auth.isUserSignedIn()) {
-      let observable = this.auth.getCredentials().map(creds => this.sigv4.get(this.endpoint, 'participants', creds)).concatAll().share()
+      let path = 'participants/2018'
+      if(searchTerm){
+        path += '?search=' + searchTerm
+      }
+      let observable = this.auth.getCredentials().map(creds => this.sigv4.get(this.endpoint, path, creds)).concatAll().share()
       observable.subscribe(resp => {
         console.log(resp)
         let data = resp.json()
@@ -56,14 +59,14 @@ export class ParticipantStore {
     let observable = this.auth.getCredentials().map(creds => this.sigv4.post(this.endpoint, 'participants', participant, creds)).concatAll().share()
 
     observable.subscribe(resp => {
-      if (resp.status === 200) {
+      if (resp.status === 201) {
         let participants = this._participants.getValue().toArray()
         let participant = resp.json().participant
         participants.push(participant)
         this._participants.next(List(participants))
       }
     })
-    return observable.map(resp => resp.status === 200 ? resp.json().participant : null)
+    return observable.map(resp => resp.status === 201 ? resp.json().participant : null)
   }
 
   deleteTask (index): Observable<IParticipant> {

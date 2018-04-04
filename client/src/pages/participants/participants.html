@@ -1,16 +1,14 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>
-      Participants
-    </ion-title>
-  </ion-navbar>
-  <ion-toolbar no-border-top>
-    <ion-searchbar [(ngModel)]="searchString" showCancelButton="true">
+    <ion-searchbar [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearchInput()" showCancelButton="true" placeholder="Search By Name">
     </ion-searchbar>
-  </ion-toolbar>
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
+  <div *ngIf="searching" class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
   <ion-refresher (ionRefresh)="doRefresh($event)" [enabled]="auth.isUserSignedIn()">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -27,15 +25,40 @@
       <h3 text-center class="soft"> No Data yet !! </h3>
     </div>
 
+    <ion-scroll scrollX="true" direction="x">
+      <ion-card *ngFor="let participant of participantStore.participants | async; let idx = index">
+        <ion-card-content>
+          <ion-card-title>
+            {{ participant.fName + ' ' + participant.lName }}
+          </ion-card-title>
+          <ion-icon name="bicycle"></ion-icon>
+          <ion-icon name="mail"> {{ participant.email }}</ion-icon>
+          <ion-icon name="call"> {{ participant.phone }}</ion-icon>
+        </ion-card-content>
+        <ion-row no-padding class='card-stats'>
+          <ion-col text-left>
+            <button small ion-button icon-left clear color="secondary">
+              <ion-icon name="folder"></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col text-right>
+            <button small ion-button icon-left clear color="primary">
+              <ion-icon name="settings"></ion-icon>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-scroll>
+
     <div *ngIf="(size | async) > 0">
       <ion-list>
         <ion-list-header class="danger-text">
           Todo
         </ion-list-header>
         <ng-container *ngFor="let participant of participantStore.participants | async; let idx = index" >
-          <ion-item-sliding *ngIf="participant.completed === false">
+          <ion-item-sliding>
             <ion-item>
-              <h3>{{participant.name}} - <b>{{participant.project}}</b></h3>
+              <h3>{{participant.Id}} - <b>{{participant.yyyy}}</b></h3>
               <p><i>{{participant.due | fromNow}}</i> - {{participant.description}}</p>
             </ion-item>
             <ion-item-options side="right">
@@ -57,9 +80,9 @@
           Completed
         </ion-list-header>
         <ng-container *ngFor="let participant of participantStore.participants | async; let idx = index" >
-          <ion-item-sliding *ngIf="participant.completed === true">
+          <ion-item-sliding>
             <ion-item>
-              <h3>{{participant.name}} - <b>{{participant.project}}</b></h3>
+              <h3>{{participant.Id}} - <b>{{participant.yyyy}}</b></h3>
               <p><i>{{participant.due | fromNow}}</i> - {{participant.description}}</p>
             </ion-item>
             <ion-item-options side="right">
